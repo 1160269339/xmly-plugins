@@ -304,7 +304,7 @@ def _dl_model(fname, dest):
             req = urllib.request.Request(tpl.format(f=urllib.parse.quote(fname)),
                                          headers={'User-Agent': 'Mozilla/5.0'})
             data = urllib.request.urlopen(req, timeout=60).read()
-            if len(data) < 1000:
+            if len(data) < 100 and b'\x00' not in data[:4] and fname.endswith('.onnx'):
                 raise RuntimeError('too small: %d' % len(data))
             with open(dest, 'wb') as fh:
                 fh.write(data)
